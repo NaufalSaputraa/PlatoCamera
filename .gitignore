@@ -1,0 +1,10 @@
+# Logs
+*.log
+/tools/bin/cygwin1.dll
+/tools/bin/fsck.erofs.exe
+/tools/bin/lpunpack.exe
+/tools/bin/simg2img.exe
+
+# OS generated
+.DS_Store
+Thumbs.db

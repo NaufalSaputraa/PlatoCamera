@@ -1,0 +1,12 @@
+persist.vendor.camera.privapp.list=com.android.camera
+ro.com.google.lens.oem_camera_package=com.android.camera
+ro.miui.notch=1
+
+# Camera2 API / HAL3 Enabled
+persist.vendor.camera.HAL3.enabled=1
+
+# Enable Video EIS stabilization
+persist.vendor.camera.eis.enable=1
+
+# MediaTek Advanced Features (Beauty, AI, Portrait)
+persist.vendor.camera.enableAdvanceFeatures=0x347

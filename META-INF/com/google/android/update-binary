@@ -1,0 +1,35 @@
+#!/sbin/sh
+
+# Magisk/KernelSU/APatch Module Installer Bootstrap
+# Standard updater-binary template
+
+umask 022
+
+# Setup output fd
+OUTFD=$2
+ZIPFILE=$3
+
+ui_print() {
+  echo -e "ui_print $1\nui_print" >& $OUTFD
+}
+
+# Find utility functions
+if [ -f /data/adb/ksu/util_functions.sh ]; then
+  . /data/adb/ksu/util_functions.sh
+elif [ -f /data/adb/ap/util_functions.sh ]; then
+  . /data/adb/ap/util_functions.sh
+elif [ -f /data/adb/magisk/util_functions.sh ]; then
+  . /data/adb/magisk/util_functions.sh
+else
+  ui_print "***********************************"
+  ui_print " Please install Magisk, KernelSU, "
+  ui_print " or APatch before flashing!       "
+  ui_print "***********************************"
+  exit 1
+fi
+
+# Extract module files to temporary directory
+unzip -o "$ZIPFILE" -d "$TMPDIR"
+
+# Run customize.sh
+. "$TMPDIR/customize.sh"
