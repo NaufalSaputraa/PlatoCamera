@@ -2,7 +2,7 @@ import os
 import zipfile
 from pathlib import Path
 
-WORKSPACE = Path(r"D:\Coding\PlatoCamera")
+WORKSPACE = Path(__file__).resolve().parent
 OUTPUT_ZIP = WORKSPACE / "PlatoCamera-v1.0.zip"
 
 EXCLUDE_PATTERNS = [
