@@ -30,8 +30,8 @@ def inject_leica():
             print(f"[SKIP] Leica tags already present in {path.name}")
             continue
             
-        # Insert before the closing </devicefeatures> tag
-        new_content = content.replace("</devicefeatures>", f"{LEICA_TAGS}</devicefeatures>")
+        # Insert before the closing </features> tag
+        new_content = content.replace("</features>", f"{LEICA_TAGS}</features>")
         
         with open(path, 'w', encoding='utf-8') as f:
             f.write(new_content)

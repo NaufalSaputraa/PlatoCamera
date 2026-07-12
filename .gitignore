@@ -4,6 +4,7 @@
 /tools/bin/fsck.erofs.exe
 /tools/bin/lpunpack.exe
 /tools/bin/simg2img.exe
+.agents
 
 # OS generated
 .DS_Store

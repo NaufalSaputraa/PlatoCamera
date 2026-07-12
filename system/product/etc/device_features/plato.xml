@@ -538,4 +538,10 @@
     <!--  MIUI ADD: PKMS_ParentalControl  -->
     <bool name="support_parental_control">true</bool>
     <!-- END PKMS_ParentalControl -->
+
+    <!-- Leica Camera Features Mod -->
+    <bool name="support_leica_style">true</bool>
+    <bool name="is_support_leica_camera">true</bool>
+    <bool name="support_camera_leica">true</bool>
+    <bool name="support_camera_leica_watermark">true</bool>
 </features>
