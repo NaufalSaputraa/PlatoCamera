@@ -1,0 +1,42 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Package Module Zip
+        run: |
+          python pack.py
+
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: PlatoCamera-v1.0.zip
+          name: Release ${{ github.ref_name }}
+          body: |
+            Automated release for PlatoCamera module version ${{ github.ref_name }}.
+            
+            ### Installation
+            1. Download the attached `PlatoCamera-v1.0.zip`.
+            2. Flash in Magisk or KernelSU app.
+            3. Reboot device.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
