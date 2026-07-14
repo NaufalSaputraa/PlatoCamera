@@ -22,14 +22,17 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Package Module Zip
+      - name: Package Module Zip and Prepare Standalone APK
         run: |
           python pack.py
+          cp system/priv-app/MiuiCamera/MiuiCamera.apk PlatoCamera.apk
 
-      - name: Create Release and Upload Asset
+      - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v2
         with:
-          files: PlatoCamera-*.zip
+          files: |
+            PlatoCamera-*.zip
+            PlatoCamera.apk
           name: Release ${{ github.ref_name }}
           body: |
             ## PlatoCamera ${{ github.ref_name }}
@@ -38,42 +41,49 @@ jobs:
             
             ### Requirements
             - **Device**: Xiaomi 12T (plato)
-            - **ROM**: AOSP-based ROMs
+            - **ROM**: AOSP-based ROMs (Android 15-16)
             - **Root Manager**: KernelSU Next (recommended) or Magisk
             
             ---
             
             ### 🛠️ Step-by-Step Installation Guide (MANDATORY)
             
-            Please follow these steps carefully to ensure the camera app launches successfully:
+            Please follow these steps carefully to ensure the camera app launches successfully and the launcher icon appears:
             
             1. **Prerequisites (KernelSU Users Only)**:
                - Ensure you have the **`meta-hybrid_mount`** (Hybrid Mount) module installed and active on your device. This is mandatory for KernelSU to support folder overlay mounting.
             
             2. **Flash Module**:
-               - Download the attached `PlatoCamera-v1.1.zip` (or the latest zip below).
+               - Download the attached module zip (e.g. `PlatoCamera-v1.4.5-Stable.zip`) from below.
                - Flash the zip file in **KernelSU Manager** or **Magisk**.
                - *Do NOT reboot your phone yet!*
                
             3. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
                - Open **KernelSU Next Manager** app.
-               - Go to the **Superuser** tab (tameng/shield icon).
+               - Go to the **Superuser** tab (shield icon).
                - Find **Kamera** (`com.android.camera`) in the list.
                - Turn **ON** / **Enable** the Superuser access toggle.
                - *Why?* KernelSU/SuSFS automatically hides modules from non-root apps. Granting root access to the Camera app bypasses this restriction so it can see and load its own files.
                
-            3. **Reboot**:
-               - Reboot your phone to apply the mounts and disable conflicting stock camera packages.
+            4. **Reboot**:
+               - Reboot your phone to apply system mounts.
                
-            4. **Enjoy**:
-               - Launch the Camera app. It should open smoothly with Leica modes and full native capabilities.
+            5. **Manual APK Installation for Launcher Icon (MANDATORY on AOSP)**:
+               - On AOSP ROMs, the launcher often fails to scan or display icons for system apps injected via Magisk.
+               - Download the standalone **`PlatoCamera.apk`** from below and install it manually.
+               - This registers the app as a user app update, forcing the launcher icon to show up in your app drawer while still retaining all system libraries and permissions from the Magisk module.
+               
+            6. **Clear App Data (MANDATORY)**:
+               - Go to **Settings -> Apps -> Kamera -> Storage** and tap **Clear Data / Clear Storage** (Hapus Penyimpanan/Data).
+               - *Why?* This is required to reset cached configuration states so the camera app registers the new patches, enabling full 60 FPS video recording and resolving visual glitches.
+               - Open the app, grant all runtime permissions, and enjoy!
                
             ---
             
             ### ❓ Troubleshooting
             
-            - **Camera icon is missing**: The module attempts to automatically disable stock AOSP cameras (`org.lineageos.aperture` etc.). If the icon doesn't show up, check your App Info list and ensure the HyperOS Camera isn't disabled.
             - **Camera crashes immediately**: Double-check that Superuser access is correctly granted to `com.android.camera` in KernelSU.
+            - **60 FPS option is missing**: Ensure you have performed Step 6 (Clear App Data) to clear cached camera configurations.
           draft: false
           prerelease: false
         env:
