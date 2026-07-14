@@ -3,7 +3,7 @@ import zipfile
 from pathlib import Path
 
 WORKSPACE = Path(__file__).resolve().parent
-OUTPUT_ZIP = WORKSPACE / "PlatoCamera-v1.1.zip"
+OUTPUT_ZIP = WORKSPACE / "PlatoCamera-v1.1.1.zip"
 
 EXCLUDE_PATTERNS = [
     ".git",
@@ -12,6 +12,7 @@ EXCLUDE_PATTERNS = [
     "pack.py",
     "PlatoCamera-v1.0.zip",
     "PlatoCamera-v1.1.zip",
+    "PlatoCamera-v1.1.1.zip",
     "__pycache__",
     ".gitignore",
     ".gitattributes"

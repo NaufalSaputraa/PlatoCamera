@@ -2,6 +2,7 @@ persist.vendor.camera.privapp.list=com.android.camera
 ro.com.google.lens.oem_camera_package=com.android.camera
 ro.miui.notch=1
 
+
 # Camera2 API / HAL3 Enabled
 persist.vendor.camera.HAL3.enabled=1
 
@@ -10,3 +11,6 @@ persist.vendor.camera.eis.enable=1
 
 # MediaTek Advanced Features (Beauty, AI, Portrait)
 persist.vendor.camera.enableAdvanceFeatures=0x347
+
+# Leica Feature Spoofing (Enable Leica modes on all cameras)
+ro.product.mod_device=diting_global
