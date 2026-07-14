@@ -27,16 +27,50 @@ jobs:
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
-          files: PlatoCamera-v1.0.zip
+          files: PlatoCamera-*.zip
           name: Release ${{ github.ref_name }}
           body: |
-            Automated release for PlatoCamera module version ${{ github.ref_name }}.
+            ## PlatoCamera ${{ github.ref_name }}
             
-            ### Installation
-            1. Download the attached `PlatoCamera-v1.0.zip`.
-            2. Flash in Magisk or KernelSU app.
-            3. Reboot device.
+            Porting Xiaomi HyperOS Camera to AOSP ROMs for Xiaomi 12T (plato).
+            
+            ### Requirements
+            - **Device**: Xiaomi 12T (plato)
+            - **ROM**: AOSP-based ROMs
+            - **Root Manager**: KernelSU Next (recommended) or Magisk
+            
+            ---
+            
+            ### 🛠️ Step-by-Step Installation Guide (MANDATORY)
+            
+            Please follow these steps carefully to ensure the camera app launches successfully:
+            
+            1. **Flash Module**:
+               - Download the attached `PlatoCamera-v1.1.zip` (or the latest zip below).
+               - Flash the zip file in **KernelSU Manager** or **Magisk**.
+               - *Do NOT reboot your phone yet!*
+               
+            2. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
+               - Open **KernelSU Next Manager** app.
+               - Go to the **Superuser** tab (tameng/shield icon).
+               - Find **Kamera** (`com.android.camera`) in the list.
+               - Turn **ON** / **Enable** the Superuser access toggle.
+               - *Why?* KernelSU/SuSFS automatically hides modules from non-root apps. Granting root access to the Camera app bypasses this restriction so it can see and load its own files.
+               
+            3. **Reboot**:
+               - Reboot your phone to apply the mounts and disable conflicting stock camera packages.
+               
+            4. **Enjoy**:
+               - Launch the Camera app. It should open smoothly with Leica modes and full native capabilities.
+               
+            ---
+            
+            ### ❓ Troubleshooting
+            
+            - **Camera icon is missing**: The module attempts to automatically disable stock AOSP cameras (`org.lineageos.aperture` etc.). If the icon doesn't show up, check your App Info list and ensure the HyperOS Camera isn't disabled.
+            - **Camera crashes immediately**: Double-check that Superuser access is correctly granted to `com.android.camera` in KernelSU.
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
