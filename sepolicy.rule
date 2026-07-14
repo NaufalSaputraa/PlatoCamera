@@ -1,0 +1,17 @@
+# PlatoCamera custom SELinux rules
+
+# Permissive mode for MediaTek HAL camera daemon
+permissive mtk_hal_camera
+
+# Allow mtk_hal_camera to read default properties and connect to services
+allow mtk_hal_camera default_prop file { read open getattr map }
+allow mtk_hal_camera property_socket sock_file write
+allow mtk_hal_camera init unix_stream_socket connectto
+
+# Allow mtk_hal_camera to write to vendor camera data files
+allow mtk_hal_camera vendor_camera_data_file dir { write add_name remove_name search }
+allow mtk_hal_camera vendor_camera_data_file file { create write open read getattr unlink }
+
+# Allow com.android.camera (running as priv_app) to render video preview window
+allow priv_app unlabeled filesystem getattr
+allow priv_app qemu_hw_prop file { read open getattr map }

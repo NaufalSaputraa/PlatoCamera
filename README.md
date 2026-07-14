@@ -12,13 +12,13 @@ HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Andro
 
 ## Installation & Configuration (MANDATORY)
 
-Please follow these steps carefully to ensure the camera app launches successfully:
+Please follow these steps carefully to ensure the camera app launches successfully and the launcher icon appears:
 
 1. **Prerequisites (KernelSU Users Only)**:
    - Make sure you have the **`meta-hybrid_mount`** (Hybrid Mount) module installed and active in KernelSU. This is required to support folder overlay mounting on KernelSU.
    
 2. **Flash Module**:
-   - Download the latest `PlatoCamera-v1.1.zip` from the Releases section.
+   - Download the latest `PlatoCamera-v1.4.5-Stable.zip` from the Releases section.
    - Flash the zip file in **KernelSU Manager** or **Magisk**.
    - *Do NOT reboot your phone yet!*
    
@@ -29,11 +29,18 @@ Please follow these steps carefully to ensure the camera app launches successful
    - Turn **ON** / **Enable** the Superuser access toggle.
    - *Why?* KernelSU and SuSFS hide modules from non-root apps. Granting root access to the Camera app bypasses this namespace restriction, allowing the app process to see and load its own files.
 
-3. **Reboot**:
+4. **Reboot**:
    - Reboot your device.
    
-4. **First Launch**:
-   - On the first boot, the helper script automatically grants all permissions to the camera app. Launch the camera app and enjoy!
+5. **Manual APK Installation for Launcher Icon (MANDATORY on AOSP)**:
+   - On AOSP ROMs, the launcher often fails to scan or display icons for system apps injected via Magisk.
+   - Extract the `MiuiCamera.apk` from the module zip (located inside `system/priv-app/MiuiCamera/`), or download the standalone `PlatoCamera.apk` from the GitHub release.
+   - Install the APK manually on your device. This registers the app as a user app update, forcing the launcher icon to show up in your app drawer while still retaining all system libraries and permissions from the Magisk module.
+
+6. **Clear App Data (MANDATORY)**:
+   - Go to **Settings -> Apps -> Kamera -> Storage** and tap **Clear Data / Clear Storage** (Hapus Penyimpanan/Data).
+   - *Why?* This is required to reset cached configuration states so the camera app registers the new patches, enabling full 60 FPS video recording and resolving visual glitches.
+   - Open the app, grant all runtime permissions, and enjoy!
 
 ## How It Works
 

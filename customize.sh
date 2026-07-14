@@ -78,6 +78,11 @@ if [ ! -f "$FLAG_FILE" ]; then
       echo "  Granted: $perm" >> "$LOG_FILE"
     done
 
+    # Explicitly grant critical storage AppOps
+    appops set $pkg MANAGE_EXTERNAL_STORAGE allow >/dev/null 2>&1
+    appops set $pkg READ_EXTERNAL_STORAGE allow >/dev/null 2>&1
+    appops set $pkg WRITE_EXTERNAL_STORAGE allow >/dev/null 2>&1
+
     # Enable all appops permissions
     appops get $pkg 2>/dev/null | grep -i 'mode:' | sed 's/.*Uid mode://i; s/:.*//; s/ //g; /^$/d' | sort -u | while read op; do
       appops set --uid $pkg $op allow >/dev/null 2>&1

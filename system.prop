@@ -9,8 +9,14 @@ persist.vendor.camera.HAL3.enabled=1
 # Enable Video EIS stabilization
 persist.vendor.camera.eis.enable=1
 
-# MediaTek Advanced Features (Beauty, AI, Portrait)
-persist.vendor.camera.enableAdvanceFeatures=0x347
+# MediaTek Advanced Features (Beauty, AI, Portrait) - Disabled to fix video mode on AOSP
+persist.vendor.camera.enableAdvanceFeatures=0
+persist.vendor.camera.bokeh.disable=1
 
 # Leica Feature Spoofing (Enable Leica modes on all cameras)
-ro.product.mod_device=diting_global
+ro.product.mod_device=ishtar_global
+
+# Disable MiVi Parallel Processing (Fix photo capture crash on AOSP)
+persist.vendor.camera.mivi.enable=0
+vendor.camera.support.mivi=0
+

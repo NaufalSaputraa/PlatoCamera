@@ -6,6 +6,11 @@
 /tools/bin/simg2img.exe
 .agents
 
+# Ignore build tools and archives
+tools/
+*.zip
+patched_camera.apk
+
 # OS generated
 .DS_Store
 Thumbs.db

@@ -1,1 +1,5 @@
 permissive mtk_hal_camera
+allow mtk_hal_camera default_prop file { read open getattr map }
+allow mtk_hal_camera property_socket sock_file write
+allow mtk_hal_camera init unix_stream_socket connectto
+allow priv_app unlabeled filesystem getattr
