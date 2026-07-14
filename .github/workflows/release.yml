@@ -45,12 +45,15 @@ jobs:
             
             Please follow these steps carefully to ensure the camera app launches successfully:
             
-            1. **Flash Module**:
+            1. **Prerequisites (KernelSU Users Only)**:
+               - Ensure you have the **`meta-hybrid_mount`** (Hybrid Mount) module installed and active on your device. This is mandatory for KernelSU to support folder overlay mounting.
+            
+            2. **Flash Module**:
                - Download the attached `PlatoCamera-v1.1.zip` (or the latest zip below).
                - Flash the zip file in **KernelSU Manager** or **Magisk**.
                - *Do NOT reboot your phone yet!*
                
-            2. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
+            3. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
                - Open **KernelSU Next Manager** app.
                - Go to the **Superuser** tab (tameng/shield icon).
                - Find **Kamera** (`com.android.camera`) in the list.

@@ -14,12 +14,15 @@ HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Andro
 
 Please follow these steps carefully to ensure the camera app launches successfully:
 
-1. **Flash Module**:
+1. **Prerequisites (KernelSU Users Only)**:
+   - Make sure you have the **`meta-hybrid_mount`** (Hybrid Mount) module installed and active in KernelSU. This is required to support folder overlay mounting on KernelSU.
+   
+2. **Flash Module**:
    - Download the latest `PlatoCamera-v1.1.zip` from the Releases section.
    - Flash the zip file in **KernelSU Manager** or **Magisk**.
    - *Do NOT reboot your phone yet!*
    
-2. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
+3. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
    - Open **KernelSU Next Manager** app.
    - Go to the **Superuser** tab (shield icon).
    - Find **Kamera** (`com.android.camera`) in the list.
