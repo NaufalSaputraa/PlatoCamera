@@ -25,51 +25,14 @@ if [ "$API_LEVEL" -lt 35 ]; then
     ui_print "  but it may still work on older versions."
 fi
 
-# Detect conflicts and find stock camera path (com.android.camera)
-ui_print "- Checking for conflicting camera apps..."
-stock_cam_path=""
-# Find path of system package com.android.camera (excluding our own PlatoCamera)
-for pkg_info in $(pm list packages -s -f "com.android.camera" 2>/dev/null); do
-    # Format of pkg_info: package:/system/priv-app/Camera2/Camera2.apk=com.android.camera
-    path_apk=$(echo "$pkg_info" | sed -n 's/^package:\(.*\)=com\.android\.camera$/\1/p')
-    if [ -n "$path_apk" ] && [ -z "$(echo "$path_apk" | grep -i "PlatoCamera")" ]; then
-        stock_cam_path=$(dirname "$path_apk")
-        break
-    fi
-done
-
-# Set REPLACE to disable stock camera by mounting an empty folder over it
-if [ -n "$stock_cam_path" ]; then
-    ui_print "- Found stock camera at: $stock_cam_path"
-    ui_print "- Hiding stock camera to prevent package conflict..."
-    # Extract relative path from system partition root (e.g., /system_ext/priv-app/Camera2 -> /system_ext/priv-app/Camera2)
-    # Magisk REPLACE paths should be absolute or relative depending on system mount
-    # Let's add it to REPLACE
-    REPLACE="$REPLACE $stock_cam_path"
-else
-    ui_print "- No conflicting system camera app (com.android.camera) detected."
-fi
-
-# Also disable Aperture if present (often has package org.lineageos.aperture)
-aperture_path=""
-for pkg_info in $(pm list packages -s -f "org.lineageos.aperture" 2>/dev/null); do
-    path_apk=$(echo "$pkg_info" | sed -n 's/^package:\(.*\)=org\.lineageos\.aperture$/\1/p')
-    if [ -n "$path_apk" ]; then
-        aperture_path=$(dirname "$path_apk")
-        break
-    fi
-done
-if [ -n "$aperture_path" ]; then
-    ui_print "- Found LineageOS Aperture at: $aperture_path"
-    ui_print "- Hiding Aperture camera..."
-    REPLACE="$REPLACE $aperture_path"
-fi
+# No REPLACE logic is used to avoid overlayfs mount failures on /product/app.
+# Instead, stock packages are disabled via pm disable in service.sh on boot.
 
 # Set standard permissions for module files
 ui_print "- Setting file permissions..."
 set_perm_recursive $MODPATH 0 0 0755 0644
 # Ensure libraries have execute permissions if required
-set_perm_recursive $MODPATH/system/system_ext/lib64 0 0 0755 0755
+set_perm_recursive $MODPATH/system/lib64 0 0 0755 0755
 
 # Create a persistent service.sh script to reset bootloop counter and grant permissions
 ui_print "- Creating post-boot helper script..."
@@ -95,6 +58,12 @@ if [ ! -f "$FLAG_FILE" ]; then
   echo "[service] Starting first-boot setup..." >> "$LOG_FILE"
   # Extra delay to ensure package manager is ready
   sleep 8
+
+  # Disable stock cameras to prevent dual-app layout
+  for stock_pkg in org.lineageos.aperture com.google.android.apps.googlecamera.fishfood; do
+    pm disable $stock_pkg >/dev/null 2>&1
+    echo "[service] Disabled stock camera package: $stock_pkg" >> "$LOG_FILE"
+  done
 
   # Loop through our packages
   for pkg in com.android.camera com.miui.extraphoto; do

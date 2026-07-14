@@ -1,6 +1,6 @@
 id=PlatoCamera
 name=PlatoCamera
-version=v1.0
-versionCode=1000
+version=v1.1
+versionCode=1100
 author=plato-dev
 description=HyperOS MiuiCamera port for Xiaomi 12T (plato) on AOSP ROMs (Android 15-16).
