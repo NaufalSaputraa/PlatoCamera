@@ -56,23 +56,23 @@ jobs:
             2. **Flash Module**:
                - Download the attached module zip (e.g. `PlatoCamera-v1.4.5-Stable.zip`) from below.
                - Flash the zip file in **KernelSU Manager** or **Magisk**.
-               - *Do NOT reboot your phone yet!*
-               
-            3. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
-               - Open **KernelSU Next Manager** app.
+            
+            3. **Reboot (MANDATORY FIRST)**:
+               - Reboot your device now.
+               - *Why?* On some ROMs/devices, granting superuser permissions before the first reboot can trigger a bootloop or cause the package manager to fail. Always reboot first!
+            
+            4. **Grant Superuser (Root) Access (CRITICAL for KernelSU/SuSFS)**:
+               - After your device boots up and the Camera app appears, open the **KernelSU Next** (or APatch) manager app.
                - Go to the **Superuser** tab (shield icon).
-               - Find **Kamera** (`com.android.camera`) in the list.
-               - Turn **ON** / **Enable** the Superuser access toggle.
-               - *Why?* KernelSU/SuSFS automatically hides modules from non-root apps. Granting root access to the Camera app bypasses this restriction so it can see and load its own files.
-               
-            4. **Reboot**:
-               - Reboot your phone to apply system mounts.
-               
+               - Find **Kamera** (`com.android.camera`) in the list and turn **ON** the Superuser access toggle.
+               - If **ExtraPhoto** (`com.miui.extraphoto`) also appears in the list, enable Superuser access for it as well.
+               - *Why?* KernelSU/SuSFS hide module files from non-root apps. Granting root access bypasses this namespace restriction so the apps can load their proprietary libraries. This also prevents crashes in filter/editor modes (which rely on ExtraPhoto).
+            
             5. **Manual APK Installation for Launcher Icon (MANDATORY on AOSP)**:
                - On AOSP ROMs, the launcher often fails to scan or display icons for system apps injected via Magisk.
                - Download the standalone **`PlatoCamera.apk`** from below and install it manually.
                - This registers the app as a user app update, forcing the launcher icon to show up in your app drawer while still retaining all system libraries and permissions from the Magisk module.
-               
+            
             6. **Clear App Data (MANDATORY)**:
                - Go to **Settings -> Apps -> Kamera -> Storage** and tap **Clear Data / Clear Storage** (Hapus Penyimpanan/Data).
                - *Why?* This is required to reset cached configuration states so the camera app registers the new patches, enabling full 60 FPS video recording and resolving visual glitches.
