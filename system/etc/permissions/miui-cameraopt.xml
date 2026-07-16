@@ -16,5 +16,5 @@
 
 <permissions>
     <library name="miui-cameraopt"
-            file="/system_ext/framework/miui-cameraopt.jar" />
+            file="/system/framework/miui-cameraopt.jar" />
 </permissions>

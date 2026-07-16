@@ -36,7 +36,8 @@ EXCLUDE_PATTERNS = [
     "PlatoCamera-v1.4.5-Stable.zip",
     "__pycache__",
     ".gitignore",
-    ".gitattributes"
+    ".gitattributes",
+    "PlatoCamera.apk"
 ]
 
 def should_exclude(path: Path) -> bool:

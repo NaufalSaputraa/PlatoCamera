@@ -20,18 +20,17 @@ Please follow these steps carefully to ensure the camera app launches successful
 2. **Flash Module**:
    - Download the latest `PlatoCamera-v1.4.5-Stable.zip` from the Releases section.
    - Flash the zip file in **KernelSU Manager** or **Magisk**.
-   - *Do NOT reboot your phone yet!*
-   
-3. **Grant Superuser (Root) Access to Camera (CRITICAL for KernelSU/SuSFS)**:
-   - Open **KernelSU Next Manager** app.
-   - Go to the **Superuser** tab (shield icon).
-   - Find **Kamera** (`com.android.camera`) in the list.
-   - Turn **ON** / **Enable** the Superuser access toggle.
-   - *Why?* KernelSU and SuSFS hide modules from non-root apps. Granting root access to the Camera app bypasses this namespace restriction, allowing the app process to see and load its own files.
+3. **Reboot (MANDATORY FIRST)**:
+   - Reboot your device now.
+   - *Why?* On some ROMs/devices, granting superuser permissions before the first reboot can trigger a bootloop or cause the package manager to fail. Always reboot first!
 
-4. **Reboot**:
-   - Reboot your device.
-   
+4. **Grant Superuser (Root) Access (CRITICAL for KernelSU/SuSFS)**:
+   - After your device boots up and the Camera app appears, open the **KernelSU Next** (or APatch) manager app.
+   - Go to the **Superuser** tab (shield icon).
+   - Find **Kamera** (`com.android.camera`) in the list and turn **ON** the Superuser access toggle.
+   - If **ExtraPhoto** (`com.miui.extraphoto`) also appears in the list, enable Superuser access for it as well.
+   - *Why?* KernelSU and SuSFS hide module files from non-root apps. Granting root access bypasses this namespace restriction so the apps can load their proprietary libraries. This also prevents crashes in filter/editor modes (which rely on ExtraPhoto).
+
 5. **Manual APK Installation for Launcher Icon (MANDATORY on AOSP)**:
    - On AOSP ROMs, the launcher often fails to scan or display icons for system apps injected via Magisk.
    - Extract the `MiuiCamera.apk` from the module zip (located inside `system/priv-app/MiuiCamera/`), or download the standalone `PlatoCamera.apk` from the GitHub release.
