@@ -39,12 +39,11 @@ jobs:
             
             Porting Xiaomi HyperOS Camera to AOSP ROMs for Xiaomi 12T (plato).
             
-            ### 🆕 Changelog v1.4.6-Stable
-            - **Fix Startup Crashes on AOSP**: Fixed shared library load paths for `miui-cameraopt` and `com.xiaomi.hardware.camera.companion` by pointing them to `/system/framework/`.
-            - **Fix Filter/Editor Mode Crash**: Moved `com.miui.extraphoto` privileged permissions to its own `/product/etc/permissions/` configuration to satisfy Android 10+ partition-strict verification.
-            - **Reduce ZIP File Size**: Excluded the standalone `PlatoCamera.apk` from the module ZIP, saving ~101 MB (file size reduced from 246 MB to 145 MB).
-            - **Prevent Initial Bootloops**: Updated the installation guide to mandate a system reboot *before* granting root/SU permissions in KernelSU Next / APatch.
-            
+            ### 🆕 Changelog v1.4.7-Stable
+            - **Universal AOSP Port Integration (Sevtinge v1.1.1)**: Integrated the universal 157 MB AOSP port APK featuring 7 DEX layers, full 12 MP (Pixel Binning) and 108 MP (Ultra HD Remosaic) capture support, Pro mode, Night mode, and Leica styles.
+            - **Fix Startup Crashes & ANGLE NPE**: Automatic first-boot execution sets `angle_gl_driver_selection_values=native` for `com.android.camera` to prevent ANGLE initialization crashes on Android 15 AOSP ROMs lacking `com.android.angle`.
+            - **Clean Package Footprint**: Removed corrupt `.idsig` files to prevent package manager scan failures.
+
             ### Requirements
             - **Device**: Xiaomi 12T (plato)
             - **ROM**: AOSP-based ROMs (Android 15-16)
@@ -56,11 +55,13 @@ jobs:
             
             Please follow these steps carefully to ensure the camera app launches successfully and the launcher icon appears:
             
-            1. **Prerequisites (KernelSU Users Only)**:
-               - Ensure you have the **`meta-hybrid_mount`** (Hybrid Mount) module installed and active on your device. This is mandatory for KernelSU to support folder overlay mounting.
+            1. **Prerequisites (KernelSU & Hybrid Mount Users - CRITICAL)**:
+               - Ensure you have the **`hybrid_mount`** (Hybrid Mount Meta-module) installed and active on your device.
+               - **CRITICAL CONFIG STEP**: Open `/data/adb/hybrid-mount/config.toml` on your device and set `disable_umount = true`.
+               - *Why?* By default, `hybrid_mount` unmounts module overlays for non-root apps. Setting `disable_umount = true` ensures `MiuiCamera.apk` remains visible to the camera process and system.
             
-            2. **Flash Module**:
-               - Download the attached module zip (e.g. `PlatoCamera-v1.4.5-Stable.zip`) from below.
+             2. **Flash Module**:
+                - Download the attached module zip (e.g. `PlatoCamera-${{ github.ref_name }}.zip`) from below.
                - Flash the zip file in **KernelSU Manager** or **Magisk**.
             
             3. **Reboot (MANDATORY FIRST)**:

@@ -14,9 +14,10 @@ Below is the compressed session state for the next AI session. Copy and paste th
 * User requirement: Upgrade system camera to MIUI Camera v6.1 (universal port).
 
 ### Status Summary
-* **Magisk Module**: Version `v1.3.6-Beta` (versionCode `1360`).
-* **Target ZIP**: `d:\Coding\PlatoCamera\PlatoCamera-v1.3.6-Beta.zip`.
+* **Magisk Module**: Version `v1.4.7-Beta` (versionCode `1470`).
+* **Target ZIP**: `d:\Coding\PlatoCamera\PlatoCamera-v1.4.7-Beta.zip`.
 * **Path**: `/system/priv-app/MiuiCamera/MiuiCamera.apk`.
+* **Note**: Smali patches below (QiGigsaw, MIVI) still apply to current version.
 
 ### Problems Resolved & Technical Implementations
 1. **Startup NullPointerException in GraphicsEnvironment**:

@@ -34,6 +34,83 @@ set_perm_recursive $MODPATH 0 0 0755 0644
 # Ensure libraries have execute permissions if required
 set_perm_recursive $MODPATH/system/lib64 0 0 0755 0755
 
+# Generate autolog script for crash/error capture
+ui_print "- Creating autolog script..."
+cat << 'AUTOLOG' > "$MODPATH/autolog.sh"
+#!/system/bin/sh
+# PlatoCamera Auto-Logger
+# Captures crashes & errors automatically
+
+TMP_DIR="/data/local/tmp/plato_logs"
+SD_DIR="/sdcard/PlatoCamera_Logs"
+PID_FILE="/data/local/tmp/platocamera_autolog.pid"
+STAMP="$TMP_DIR/_status.txt"
+mkdir -p "$TMP_DIR"
+
+# Write status for debugging
+echo "autolog: starting at $(date)" > "$STAMP"
+
+# Only one instance
+if [ -f "$PID_FILE" ] && kill -0 "$(cat $PID_FILE)" 2>/dev/null; then echo "autolog: already running" >> "$STAMP"; exit 0; fi
+echo $$ > "$PID_FILE"
+echo "autolog: PID $$ running" >> "$STAMP"
+
+# Try to create sdcard dir (may fail early in boot, that's OK)
+mkdir -p "$SD_DIR" 2>/dev/null && echo "autolog: sdcard OK" >> "$STAMP" || echo "autolog: sdcard not ready" >> "$STAMP"
+
+LAST_EVENT=""
+
+LAST_EVENT=""
+while true; do
+  # Check crash buffer
+  CRASH=$(logcat -b crash -t 50 2>/dev/null | grep -iE "com.android.camera|com.miui.extraphoto|FATAL EXCEPTION|Native crash|DEBUG.*pid")
+  # Check ANR from events buffer
+  ANR=$(logcat -b events -t 20 2>/dev/null | grep -iE "am_anr.*com.android.camera|am_anr.*com.miui.extraphoto")
+  # Check non-fatal errors from camera tags
+  ERR=$(logcat -d -t 20 -s "Camera" "CameraService" "ExtraPhoto" "CameraDevice" "MIUICamera" 2>/dev/null | grep -iE "error|failed|exception|fatal")
+  # Unique fingerprint of current state
+  EVENT_SUM="$CRASH $ANR $ERR"
+  if [ -n "$EVENT_SUM" ] && [ "$EVENT_SUM" != "$LAST_EVENT" ]; then
+    TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
+    EVENT_TYPE="log"
+    [ -n "$CRASH" ] && EVENT_TYPE="crash"
+    [ -n "$ANR" ] && EVENT_TYPE="anr"
+    {
+      echo "=== PlatoCamera Auto-Log: $TIMESTAMP ==="
+      echo "=== Type: $EVENT_TYPE ==="
+      echo ""
+      [ -n "$CRASH" ] && echo "--- CRASH DETECTED ---" && logcat -b crash -d -v threadtime 2>/dev/null
+      [ -n "$ANR" ] && echo "--- ANR DETECTED ---" && logcat -b events -d -v threadtime 2>/dev/null | grep -iE "am_anr|am_crash"
+      echo "--- Camera/ExtraPhoto Logs ---"
+      logcat -d -v threadtime 2>/dev/null | grep -iE "Camera|ExtraPhoto|extraphoto|mivi|algoup"
+      echo ""
+      echo "--- Camera Service Errors ---"
+      logcat -d -v threadtime 2>/dev/null | grep -iE "CameraService|CameraDevice|ICamera"
+      echo ""
+      echo "--- SELinux Denials ---"
+      logcat -d 2>/dev/null | grep "avc: denied"
+      echo ""
+      echo "--- Kernel Messages ---"
+      dmesg 2>/dev/null | tail -50
+      echo ""
+      echo "--- Camera HAL Properties ---"
+      getprop 2>/dev/null | grep -i "camera"
+      echo ""
+      echo "=== END ==="
+    } > "$TMP_DIR/${EVENT_TYPE}_$TIMESTAMP.txt"
+    # Also copy to sdcard if available
+    cp "$TMP_DIR/${EVENT_TYPE}_$TIMESTAMP.txt" "$SD_DIR/" 2>/dev/null
+    echo "autolog: event $EVENT_TYPE at $TIMESTAMP" >> "$STAMP"
+    LAST_EVENT="$EVENT_SUM"
+  fi
+  # Trim old logs (keep last 20)
+  ls -t "$TMP_DIR"/*.txt 2>/dev/null | tail -n +21 | xargs rm -f 2>/dev/null
+  sleep 300
+done
+AUTOLOG
+
+chmod 0755 "$MODPATH/autolog.sh"
+
 # Create a persistent service.sh script to reset bootloop counter and grant permissions
 ui_print "- Creating post-boot helper script..."
 cat << 'EOF' > "$MODPATH/service.sh"
@@ -52,12 +129,24 @@ done
 echo "0" > "/data/local/tmp/platocamera_boot.txt"
 echo "[service] System booted successfully. Counter reset to 0." >> "$LOG_FILE"
 
+# Start autologger in background with debug log
+MODDIR=${0%/*}
+sh "$MODDIR/autolog.sh" >> "$LOG_FILE" 2>&1 &
+echo "[service] Autolog started" >> "$LOG_FILE"
+
 # Run setup (permissions grant and data clear) only ONCE after install/update
 FLAG_FILE="/data/local/tmp/platocamera_setup_done"
 if [ ! -f "$FLAG_FILE" ]; then
   echo "[service] Starting first-boot setup..." >> "$LOG_FILE"
   # Extra delay to ensure package manager is ready
   sleep 8
+
+  # Bypass ANGLE GraphicsEnvironment NPE crash on Infinity-X ROM
+  # com.android.angle package absent causes queryAngleChoice to NPE
+  # Setting per-app driver selection to "default" skips the allowlist resource lookup
+  settings put global angle_gl_driver_selection_pkgs "com.android.camera" > /dev/null 2>&1
+  settings put global angle_gl_driver_selection_values "native" > /dev/null 2>&1
+  echo "[service] ANGLE bypass set for com.android.camera" >> "$LOG_FILE"
 
   # Disable stock cameras to prevent dual-app layout
   for stock_pkg in org.lineageos.aperture com.google.android.apps.googlecamera.fishfood; do

@@ -1,49 +1,26 @@
+import fnmatch
 import os
 import zipfile
 from pathlib import Path
 
 WORKSPACE = Path(__file__).resolve().parent
-OUTPUT_ZIP = WORKSPACE / "PlatoCamera-v1.4.6-Stable.zip"
+OUTPUT_ZIP = WORKSPACE / "PlatoCamera-v1.4.7-Stable.zip"
 
 EXCLUDE_PATTERNS = [
-    ".git",
+    ".git*",
     ".agents",
     "tools",
     "pack.py",
-    "PlatoCamera-v1.0.zip",
-    "PlatoCamera-v1.1.zip",
-    "PlatoCamera-v1.1.1.zip",
-    "PlatoCamera-v1.2-Beta.zip",
-    "PlatoCamera-v1.2.1-Beta.zip",
-    "PlatoCamera-v1.2.2-Beta.zip",
-    "PlatoCamera-v1.3-Beta.zip",
-    "PlatoCamera-v1.3-Stable.zip",
-    "PlatoCamera-v1.3.1-Beta.zip",
-    "PlatoCamera-v1.3.2-Beta.zip",
-    "PlatoCamera-v1.3.3-Beta.zip",
-    "PlatoCamera-v1.3.4-Beta.zip",
-    "PlatoCamera-v1.3.5-Beta.zip",
-    "PlatoCamera-v1.3.6-Beta.zip",
-    "PlatoCamera-v1.3.7-Beta.zip",
-    "PlatoCamera-v1.3.8-Beta.zip",
-    "PlatoCamera-v1.3.9-Beta.zip",
-    "PlatoCamera-v1.4.0-Beta.zip",
-    "PlatoCamera-v1.4.1-Beta.zip",
-    "PlatoCamera-v1.4.2-Beta.zip",
-    "PlatoCamera-v1.4.3-Beta.zip",
-    "PlatoCamera-v1.4.4-Beta.zip",
-    "PlatoCamera-v1.4.5-Beta.zip",
-    "PlatoCamera-v1.4.5-Stable.zip",
-    "PlatoCamera-v1.4.6-Stable.zip",
+    "PlatoCamera-v*.zip",
     "__pycache__",
     ".gitignore",
     ".gitattributes",
-    "PlatoCamera.apk"
+    "PlatoCamera.apk", "uteke_*.log", "*.idsig"
 ]
 
 def should_exclude(path: Path) -> bool:
     for pattern in EXCLUDE_PATTERNS:
-        if pattern in path.parts or any(p.startswith(pattern) for p in path.parts):
+        if any(fnmatch.fnmatch(p, pattern) for p in path.parts):
             return True
     return False
 
@@ -79,3 +56,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -14,11 +14,16 @@ HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Andro
 
 Please follow these steps carefully to ensure the camera app launches successfully and the launcher icon appears:
 
-1. **Prerequisites (KernelSU Users Only)**:
-   - Make sure you have the **`meta-hybrid_mount`** (Hybrid Mount) module installed and active in KernelSU. This is required to support folder overlay mounting on KernelSU.
-   
+1. **Prerequisites (KernelSU & Hybrid Mount Users - CRITICAL)**:
+   - Make sure you have the **`hybrid_mount`** (Hybrid Mount Meta-module) installed and active in KernelSU.
+   - **CRITICAL CONFIG STEP**: Open `/data/adb/hybrid-mount/config.toml` on your device and set:
+     ```toml
+     disable_umount = true
+     ```
+     *Why?* By default, `hybrid_mount` unmounts system module overlays for non-root apps. If `disable_umount = false`, KernelSU OverlayFS will hide `MiuiCamera.apk` from the camera process, causing a startup crash (`java.io.IOException: Failed to load asset path` / `LoadedApk.mResources = null`). Setting `disable_umount = true` ensures module files remain visible.
+
 2. **Flash Module**:
-   - Download the latest `PlatoCamera-v1.4.5-Stable.zip` from the Releases section.
+   - Download the latest `PlatoCamera-v1.4.7-Stable.zip` from the Releases section.
    - Flash the zip file in **KernelSU Manager** or **Magisk**.
 3. **Reboot (MANDATORY FIRST)**:
    - Reboot your device now.

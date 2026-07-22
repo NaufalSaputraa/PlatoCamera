@@ -389,10 +389,6 @@
     <float name="device_body_sar">0.634</float>
     <!-- whether support wlan low latency mode -->
     <bool name="support_wifi_low_latency_mode">true</bool>
-    <!-- support nfc -->
-    <bool name="support_nfc">true</bool>
-    <!-- NFC related -->
-    <bool name="support_se_route">true</bool>
     <!-- whether support LHDC codec offload -->
     <bool name="support_lhdc">true</bool>
     <!-- whether support a2dp latency-->

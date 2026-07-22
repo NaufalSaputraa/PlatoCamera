@@ -9,14 +9,20 @@ persist.vendor.camera.HAL3.enabled=1
 # Enable Video EIS stabilization
 persist.vendor.camera.eis.enable=1
 
-# MediaTek Advanced Features (Beauty, AI, Portrait) - Disabled to fix video mode on AOSP
-persist.vendor.camera.enableAdvanceFeatures=0
+# Enable 108MP remosaic resolution
+persist.vendor.camera.remosaic.enable=1
+
+# MediaTek Advanced Features - disabled (MIVI is broken on AOSP, so advanced features can't work)
+persist.vendor.camera.enableAdvanceFeatures=1
 persist.vendor.camera.bokeh.disable=1
 
-# Leica Feature Spoofing (Enable Leica modes on all cameras)
-ro.product.mod_device=ishtar_global
+# Leica Feature Spoofing (plato_global = keep global features, use MTK pipeline)
+ro.product.mod_device=plato_global
 
-# Disable MiVi Parallel Processing (Fix photo capture crash on AOSP)
+# Disable MiVi Parallel Processing (Fix photo capture fallback to 2.1MP on AOSP)
 persist.vendor.camera.mivi.enable=0
 vendor.camera.support.mivi=0
 
+# Fix: Bypass ANGLE GraphicsEnvironment NPE crash on AOSP ROMs without com.android.angle
+angle_gl_driver_selection_pkgs=com.android.camera
+angle_gl_driver_selection_values=native
