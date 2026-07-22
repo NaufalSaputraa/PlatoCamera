@@ -1,13 +1,21 @@
-# PlatoCamera Magisk/KernelSU Module
+# 📸 PlatoCamera - HyperOS MiuiCamera Port
 
-HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Android 15 & 16).
+> Porting kamera resmi Xiaomi HyperOS / MIUI Camera untuk Xiaomi 12T (`plato`) di ROM Custom AOSP (Android 15 & 16).
+
+---
+
+## 📱 Preview & Screenshots
+
+| Photo Mode Options | Video Mode (60 FPS) | Pro Mode | Pro Mode (108MP Toggle) | More Modes Grid |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="docs/images/photo_mode.png" width="180"/> | <img src="docs/images/video_mode.png" width="180"/> | <img src="docs/images/pro_mode.png" width="180"/> | <img src="docs/images/pro_108mp_mode.png" width="180"/> | <img src="docs/images/more_modes.png" width="180"/> |
 
 ---
 
 ## 🇮🇩 Panduan Penggunaan (Bahasa Indonesia)
 
 ### 🌟 Fitur Utama
-- **Porting Kamera HyperOS Lengkap**: Akses seluruh mode kamera bawaan (108 MP, Mode Malam, Potret, Mode Pro, Filter Leica, Stabilisasi Video).
+- **Porting Kamera HyperOS Lengkap**: Akses seluruh mode kamera bawaan (108 MP Remosaic, 12 MP Pixel Binning, Mode Malam, Potret, Mode Pro Manual, Filter Leica, Stabilisasi Video, Teleprompter, Audio Zoom).
 - **Kompatibel Magisk & KernelSU**: Berjalan lancar di Magisk, KernelSU Next, maupun APatch.
 - **Resolusi Konflik Otomatis**: Otomatis menonaktifkan kamera bawaan ROM AOSP (Aperture / Camera2) agar tidak bentrok.
 - **Auto Permissions & Fixed ANGLE**: Ikon otomatis muncul dan masalah crash ANGLE di Android 15/16 teratasi secara otomatis.
@@ -18,7 +26,7 @@ HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Andro
 
 1. **Pengguna KernelSU & Hybrid Mount (LANGKAH KRUSIAL)**:
    - Pastikan modul **`hybrid_mount`** sudah terpasang dan aktif di KernelSU.
-   - Buka file `/data/adb/hybrid-mount/config.toml` (pakai MT Manager / Termux / Root Explorer) dan pastikan pengaturannya:
+   - Buka file `/data/adb/hybrid-mount/config.toml` (pakai MT Manager / Termux / Root Explorer) dan ubah nilainya menjadi:
      ```toml
      disable_umount = true
      ```
@@ -52,8 +60,8 @@ Kamu bisa memverifikasi keaslian file yang diunduh menggunakan hash SHA-256 beri
 
 | Nama File | SHA-256 Checksum |
 |---|---|
-| `PlatoCamera-v1.4.7-Stable.zip` | `cb435857827180f4527962152474e48a438762ca3712867874e3c12555e12a61` |
-| `PlatoCamera.apk` | `9aaf3049d66c4afe3d64b015e107e8b3843b6b0c18248af62109192ac8de72a2` |
+| **`PlatoCamera-v1.4.7-Stable.zip`** | `cb435857827180f4527962152474e48a438762ca3712867874e3c12555e12a61` |
+| **`PlatoCamera.apk`** | `9aaf3049d66c4afe3d64b015e107e8b3843b6b0c18248af62109192ac8de72a2` |
 
 ---
 
