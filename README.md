@@ -2,55 +2,76 @@
 
 HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Android 15 & 16).
 
-## Features
+---
 
-- **Full HyperOS Camera Port**: Access all native Xiaomi camera modes (108MP, Night Mode, Portrait, Pro Mode, Video Stabilization).
-- **Dual Support**: Fully compatible with both **Magisk** and **KernelSU Next / APatch**.
-- **Automated Conflict Resolution**: Automatically hides stock AOSP camera apps (Aperture / stock Camera2) to prevent package conflicts with `com.android.camera`.
-- **Auto Permission Grant**: Automatically sets correct permission policies and grants runtime user permissions on first boot.
-- **SELinux Permissive for Camera HAL**: Avoids camera access crashes on AOSP ROMs by marking `mtk_hal_camera` as permissive.
+## 🇮🇩 Panduan Penggunaan (Bahasa Indonesia)
 
-## Installation & Configuration (MANDATORY)
+### 🌟 Fitur Utama
+- **Porting Kamera HyperOS Lengkap**: Akses seluruh mode kamera bawaan (108 MP, Mode Malam, Potret, Mode Pro, Filter Leica, Stabilisasi Video).
+- **Kompatibel Magisk & KernelSU**: Berjalan lancar di Magisk, KernelSU Next, maupun APatch.
+- **Resolusi Konflik Otomatis**: Otomatis menonaktifkan kamera bawaan ROM AOSP (Aperture / Camera2) agar tidak bentrok.
+- **Auto Permissions & Fixed ANGLE**: Ikon otomatis muncul dan masalah crash ANGLE di Android 15/16 teratasi secara otomatis.
 
-Please follow these steps carefully to ensure the camera app launches successfully and the launcher icon appears:
+---
 
-1. **Prerequisites (KernelSU & Hybrid Mount Users - CRITICAL)**:
-   - Make sure you have the **`hybrid_mount`** (Hybrid Mount Meta-module) installed and active in KernelSU.
-   - **CRITICAL CONFIG STEP**: Open `/data/adb/hybrid-mount/config.toml` on your device and set:
+### 🛠️ Cara Instalasi (WAJIB DIBACA)
+
+1. **Pengguna KernelSU & Hybrid Mount (LANGKAH KRUSIAL)**:
+   - Pastikan modul **`hybrid_mount`** sudah terpasang dan aktif di KernelSU.
+   - Buka file `/data/adb/hybrid-mount/config.toml` (pakai MT Manager / Termux / Root Explorer) dan pastikan pengaturannya:
      ```toml
      disable_umount = true
      ```
-     *Why?* By default, `hybrid_mount` unmounts system module overlays for non-root apps. If `disable_umount = false`, KernelSU OverlayFS will hide `MiuiCamera.apk` from the camera process, causing a startup crash (`java.io.IOException: Failed to load asset path` / `LoadedApk.mResources = null`). Setting `disable_umount = true` ensures module files remain visible.
+   - *Alasan*: Secara default `hybrid_mount` menyembunyikan modul dari aplikasi non-root. Jika bernilai `false`, file APK kamera akan terlepas (*unmounted*) dan menyebabkan kamera crash saat dibuka (`Failed to load asset path`).
+
+2. **Flash Modul**:
+   - Unduh file `PlatoCamera-v1.4.7-Stable.zip` dari halaman Release.
+   - Flash file zip tersebut di **KernelSU Manager** atau **Magisk**.
+
+3. **Reboot HP (WAJIB REBOOT DULU)**:
+   - Restart HP kamu setelah flash selesai.
+
+4. **Beri Akses Superuser / Root (Penting untuk KernelSU)**:
+   - Setelah HP menyala kembali, buka aplikasi **KernelSU Next** (atau APatch).
+   - Masuk ke tab **Superuser** (ikon perisai).
+   - Cari **Kamera** (`com.android.camera`) dan aktifkan izin root-nya.
+   - Jika **ExtraPhoto** (`com.miui.extraphoto`) muncul, aktifkan juga izin root-nya.
+
+5. **Hapus Data Aplikasi Kamera (WAJIB)**:
+   - Buka **Pengaturan HP -> Aplikasi -> Kamera -> Penyimpanan** lalu tekan **Hapus Data / Hapus Penyimpanan**.
+   - Buka aplikasi kamera, berikan semua izin yang diminta, dan kamera siap digunakan!
+
+> 💡 **Catatan File `PlatoCamera.apk` di Release**:
+> Sekarang ikon kamera **otomatis muncul** di homescreen cukup dengan memasang modul zip di atas. File `PlatoCamera.apk` yang ada di halaman Release **sifatnya Opsional (hanya cadangan)** jika ada launcher AOSP kustom tertentu yang gagal membaca ikon aplikasi sistem.
+
+---
+
+## 🇬🇧 English Guide
+
+### Installation & Configuration (MANDATORY)
+
+1. **Prerequisites (KernelSU & Hybrid Mount Users - CRITICAL)**:
+   - Ensure **`hybrid_mount`** is installed in KernelSU.
+   - Open `/data/adb/hybrid-mount/config.toml` on your device and set:
+     ```toml
+     disable_umount = true
+     ```
+   - *Why?* By default, `hybrid_mount` unmounts overlays for non-root apps. If `disable_umount = false`, OverlayFS hides `MiuiCamera.apk`, causing startup crashes.
 
 2. **Flash Module**:
-   - Download the latest `PlatoCamera-v1.4.7-Stable.zip` from the Releases section.
-   - Flash the zip file in **KernelSU Manager** or **Magisk**.
-3. **Reboot (MANDATORY FIRST)**:
-   - Reboot your device now.
-   - *Why?* On some ROMs/devices, granting superuser permissions before the first reboot can trigger a bootloop or cause the package manager to fail. Always reboot first!
+   - Download `PlatoCamera-v1.4.7-Stable.zip` from Releases.
+   - Flash in **KernelSU Manager** or **Magisk**.
 
-4. **Grant Superuser (Root) Access (CRITICAL for KernelSU/SuSFS)**:
-   - After your device boots up and the Camera app appears, open the **KernelSU Next** (or APatch) manager app.
-   - Go to the **Superuser** tab (shield icon).
-   - Find **Kamera** (`com.android.camera`) in the list and turn **ON** the Superuser access toggle.
-   - If **ExtraPhoto** (`com.miui.extraphoto`) also appears in the list, enable Superuser access for it as well.
-   - *Why?* KernelSU and SuSFS hide module files from non-root apps. Granting root access bypasses this namespace restriction so the apps can load their proprietary libraries. This also prevents crashes in filter/editor modes (which rely on ExtraPhoto).
+3. **Reboot**:
+   - Reboot your device.
 
-5. **Manual APK Installation for Launcher Icon (MANDATORY on AOSP)**:
-   - On AOSP ROMs, the launcher often fails to scan or display icons for system apps injected via Magisk.
-   - Extract the `MiuiCamera.apk` from the module zip (located inside `system/priv-app/MiuiCamera/`), or download the standalone `PlatoCamera.apk` from the GitHub release.
-   - Install the APK manually on your device. This registers the app as a user app update, forcing the launcher icon to show up in your app drawer while still retaining all system libraries and permissions from the Magisk module.
+4. **Grant Superuser Access (KernelSU / SuSFS)**:
+   - Open **KernelSU Next** -> **Superuser** tab.
+   - Enable Root access for **Kamera** (`com.android.camera`) and **ExtraPhoto** (`com.miui.extraphoto`).
 
-6. **Clear App Data (MANDATORY)**:
-   - Go to **Settings -> Apps -> Kamera -> Storage** and tap **Clear Data / Clear Storage** (Hapus Penyimpanan/Data).
-   - *Why?* This is required to reset cached configuration states so the camera app registers the new patches, enabling full 60 FPS video recording and resolving visual glitches.
-   - Open the app, grant all runtime permissions, and enjoy!
+5. **Clear App Data**:
+   - Go to **Settings -> Apps -> Camera -> Storage -> Clear Data**.
+   - Open the app, grant permissions, and enjoy!
 
-## How It Works
-
-- The module overlays `MiuiCamera.apk` in `/system/priv-app/MiuiCamera/` and loads required proprietary MTK camera libraries into `/system/lib64/`.
-- Includes **`libgui_shim_miuicamera.so`** in `/system/lib64/` to resolve symbol compatibility issues with the AOSP windowing library (`libgui`).
-- Uses `/system/etc/device_features/plato.xml` and `/system/product/etc/device_features/plato.xml` to load device-specific configurations (sensor profile, features availability).
-- Adds privileged permission allowlist to prevent permission signature issues.
-- Modifies system properties (`system.prop`) to register the camera package and MIUI notch support.
-
+> 💡 **Note on standalone `PlatoCamera.apk` in Releases**:
+> Launcher icons now **automatically appear** upon flashing the ZIP. The standalone `PlatoCamera.apk` in the Releases section is purely **optional (backup)** for custom launchers that fail to index system apps.

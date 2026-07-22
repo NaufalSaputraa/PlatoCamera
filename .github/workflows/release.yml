@@ -49,41 +49,33 @@ jobs:
             - **ROM**: AOSP-based ROMs (Android 15-16)
             - **Root Manager**: KernelSU Next (recommended) or Magisk
             
+            ### 🇮🇩 Panduan Ringkas (Bahasa Indonesia)
+            1. **KernelSU + Hybrid Mount Users**: Wajib buka `/data/adb/hybrid-mount/config.toml` lalu ubah `disable_umount = true` lalu reboot.
+            2. **Flash Modul**: Flash `PlatoCamera-${{ github.ref_name }}.zip` di KernelSU / Magisk lalu Reboot.
+            3. **Akses Root**: Buka KernelSU -> Tab Superuser -> Aktifkan Root untuk **Kamera** (`com.android.camera`).
+            4. **Hapus Data**: Masuk Pengaturan HP -> Aplikasi -> Kamera -> Hapus Data.
+            
+            > 💡 **Catatan File `PlatoCamera.apk`**: Ikon kamera sekarang **otomatis muncul** setelah flash zip. File `PlatoCamera.apk` di bawah sifatnya **Opsional (Cadangan saja)**.
+            
             ---
             
-            ### 🛠️ Step-by-Step Installation Guide (MANDATORY)
-            
-            Please follow these steps carefully to ensure the camera app launches successfully and the launcher icon appears:
+            ### 🛠️ Step-by-Step Installation Guide (English)
             
             1. **Prerequisites (KernelSU & Hybrid Mount Users - CRITICAL)**:
-               - Ensure you have the **`hybrid_mount`** (Hybrid Mount Meta-module) installed and active on your device.
-               - **CRITICAL CONFIG STEP**: Open `/data/adb/hybrid-mount/config.toml` on your device and set `disable_umount = true`.
-               - *Why?* By default, `hybrid_mount` unmounts module overlays for non-root apps. Setting `disable_umount = true` ensures `MiuiCamera.apk` remains visible to the camera process and system.
+               - Open `/data/adb/hybrid-mount/config.toml` on your device and set `disable_umount = true`.
             
              2. **Flash Module**:
-                - Download the attached module zip (e.g. `PlatoCamera-${{ github.ref_name }}.zip`) from below.
-               - Flash the zip file in **KernelSU Manager** or **Magisk**.
+                - Download `PlatoCamera-${{ github.ref_name }}.zip` below and flash in KernelSU or Magisk.
             
-            3. **Reboot (MANDATORY FIRST)**:
-               - Reboot your device now.
-               - *Why?* On some ROMs/devices, granting superuser permissions before the first reboot can trigger a bootloop or cause the package manager to fail. Always reboot first!
+             3. **Reboot**: Restart your device.
             
-            4. **Grant Superuser (Root) Access (CRITICAL for KernelSU/SuSFS)**:
-               - After your device boots up and the Camera app appears, open the **KernelSU Next** (or APatch) manager app.
-               - Go to the **Superuser** tab (shield icon).
-               - Find **Kamera** (`com.android.camera`) in the list and turn **ON** the Superuser access toggle.
-               - If **ExtraPhoto** (`com.miui.extraphoto`) also appears in the list, enable Superuser access for it as well.
-               - *Why?* KernelSU/SuSFS hide module files from non-root apps. Granting root access bypasses this namespace restriction so the apps can load their proprietary libraries. This also prevents crashes in filter/editor modes (which rely on ExtraPhoto).
+             4. **Grant Superuser (Root) Access**:
+                - Open **KernelSU Next** -> **Superuser** -> Enable Root access for **Kamera** (`com.android.camera`).
             
-            5. **Manual APK Installation for Launcher Icon (MANDATORY on AOSP)**:
-               - On AOSP ROMs, the launcher often fails to scan or display icons for system apps injected via Magisk.
-               - Download the standalone **`PlatoCamera.apk`** from below and install it manually.
-               - This registers the app as a user app update, forcing the launcher icon to show up in your app drawer while still retaining all system libraries and permissions from the Magisk module.
-            
-            6. **Clear App Data (MANDATORY)**:
-               - Go to **Settings -> Apps -> Kamera -> Storage** and tap **Clear Data / Clear Storage** (Hapus Penyimpanan/Data).
-               - *Why?* This is required to reset cached configuration states so the camera app registers the new patches, enabling full 60 FPS video recording and resolving visual glitches.
-               - Open the app, grant all runtime permissions, and enjoy!
+             5. **Clear App Data**:
+                - Go to **Settings -> Apps -> Camera -> Clear Data**.
+                
+             > 💡 **Note on `PlatoCamera.apk`**: The standalone APK is purely **optional (backup)**. The launcher icon appears automatically after flashing the ZIP.
                
             ---
             
