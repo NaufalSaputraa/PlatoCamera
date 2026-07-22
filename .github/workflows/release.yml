@@ -26,6 +26,8 @@ jobs:
         run: |
           python pack.py
           cp system/priv-app/MiuiCamera/MiuiCamera.apk PlatoCamera.apk
+          echo "ZIP_HASH=$(sha256sum PlatoCamera-*.zip | awk '{print $1}')" >> $GITHUB_ENV
+          echo "APK_HASH=$(sha256sum PlatoCamera.apk | awk '{print $1}')" >> $GITHUB_ENV
 
       - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v2
@@ -43,6 +45,10 @@ jobs:
             - **Universal AOSP Port Integration (Sevtinge v1.1.1)**: Integrated the universal 157 MB AOSP port APK featuring 7 DEX layers, full 12 MP (Pixel Binning) and 108 MP (Ultra HD Remosaic) capture support, Pro mode, Night mode, and Leica styles.
             - **Fix Startup Crashes & ANGLE NPE**: Automatic first-boot execution sets `angle_gl_driver_selection_values=native` for `com.android.camera` to prevent ANGLE initialization crashes on Android 15 AOSP ROMs lacking `com.android.angle`.
             - **Clean Package Footprint**: Removed corrupt `.idsig` files to prevent package manager scan failures.
+
+            ### 🔒 SHA-256 Checksums
+            - `PlatoCamera-${{ github.ref_name }}.zip`: `${{ env.ZIP_HASH }}`
+            - `PlatoCamera.apk`: `${{ env.APK_HASH }}`
 
             ### Requirements
             - **Device**: Xiaomi 12T (plato)

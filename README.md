@@ -42,7 +42,18 @@ HyperOS MiuiCamera port module for Xiaomi 12T (plato) on AOSP custom ROMs (Andro
    - Buka aplikasi kamera, berikan semua izin yang diminta, dan kamera siap digunakan!
 
 > 💡 **Catatan File `PlatoCamera.apk` di Release**:
-> Sekarang ikon kamera **otomatis muncul** di homescreen cukup dengan memasang modul zip di atas. File `PlatoCamera.apk` yang ada di halaman Release **sifatnya Opsional (hanya cadangan)** jika ada launcher AOSP kustom tertentu yang gagal membaca ikon aplikasi sistem.
+> Ikon kamera **otomatis muncul** di homescreen cukup dengan memasang modul zip di atas. File `PlatoCamera.apk` yang ada di halaman Release sifatnya **Opsional (hanya cadangan)** jika ada launcher AOSP kustom tertentu yang gagal membaca ikon aplikasi sistem.
+
+---
+
+### 🔒 Verifikasi Keamanan (SHA256 Checksums)
+
+Kamu bisa memverifikasi keaslian file yang diunduh menggunakan hash SHA-256 berikut:
+
+| Nama File | SHA-256 Checksum |
+|---|---|
+| `PlatoCamera-v1.4.7-Stable.zip` | `cb435857827180f4527962152474e48a438762ca3712867874e3c12555e12a61` |
+| `PlatoCamera.apk` | `9aaf3049d66c4afe3d64b015e107e8b3843b6b0c18248af62109192ac8de72a2` |
 
 ---
 
