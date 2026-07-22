@@ -14,25 +14,22 @@ Below is the compressed session state for the next AI session. Copy and paste th
 * User requirement: Upgrade system camera to MIUI Camera v6.1 (universal port).
 
 ### Status Summary
-* **Magisk Module**: Version `v1.4.7-Beta` (versionCode `1470`).
-* **Target ZIP**: `d:\Coding\PlatoCamera\PlatoCamera-v1.4.7-Beta.zip`.
-* **Path**: `/system/priv-app/MiuiCamera/MiuiCamera.apk`.
-* **Note**: Smali patches below (QiGigsaw, MIVI) still apply to current version.
+* **Magisk Module**: Version `v1.4.7-Stable` (versionCode `1470`).
+* **Target ZIP**: `d:\Coding\PlatoCamera\PlatoCamera-v1.4.7-Stable.zip`.
+* **Path**: `/system/priv-app/MiuiCamera/MiuiCamera.apk` (165 MB, Sevtinge v1.1.1 AOSP Universal Port APK).
+* **Official ROM Device Tree Reference**: `https://github.com/mt6895-plato` (specifically `android_device_xiaomi_plato-miuicamera` for Xiaomi 12T AOSP builds).
 
 ### Problems Resolved & Technical Implementations
-1. **Startup NullPointerException in GraphicsEnvironment**:
-   * *Cause*: QiGigsaw (dynamic split delivery) validates base APK signature against split APK signatures at startup inside `com.iqiyi.android.qigsaw.core.splitinstall.SignatureValidator.validateSplit`. When base APK is re-signed with a debug key, validation fails, preventing split resources from loading and crashing with NPE in `GraphicsEnvironment.queryAngleChoice`.
-   * *Fix*: Modified `SignatureValidator.smali` in `smali_classes3` to bypass `validateSplit` and **always return `true`**.
-2. **Post-Capture JNI Thread Crash (MIVI)**:
-   * *Cause*: `ParallelDataZip` in JNI crashed after capture because the ROM lacks Xiaomi's parallel image processing daemon (MIVI/AlgoUp).
-   * *Fix*: Patched `com.xiaomi.camera.mivi.MIVISDKConfig.smali` in `smali_classes3` so that all MIVI capabilities (`isSupportAlgoUp`, `isSupportMIVI2`, etc.) **always return `false`**, forcing Java capture fallback.
-3. **Case Sensitivity & Android R+ Packaging Rules**:
-   * Recompiling resources on Windows converted lowercase filenames (like `res/kkq.xml`) to uppercase (like `res/Kkq.xml`), causing `Resources$NotFoundException`.
-   * Storing native libraries (`.so`) and `resources.arsc` compressed broke Android 11+ requirements, causing `Failed to extract native libraries` parsing errors.
-   * *Fix*: Used a custom Python script to extract files, inject only the modified `classes*.dex` files, copy all original resources/libs preserving original compression (stored mode for `.so` and `resources.arsc`), and sign/zipalign with `uber-apk-signer`.
+1. **Hybrid Mount OverlayFS Unmount Crash**:
+   * *Cause*: KernelSU `hybrid_mount` module unmounts overlayfs for non-root apps when `disable_umount = false`, hiding `MiuiCamera.apk` from the camera namespace and causing `java.io.IOException: Failed to load asset path` / `LoadedApk.mResources = null`.
+   * *Fix*: Set `disable_umount = true` in `/data/adb/hybrid-mount/config.toml`.
+2. **ANGLE GraphicsEnvironment NPE**:
+   * *Cause*: AOSP ROMs lacking `com.android.angle` trigger NPE in `queryAngleChoice`.
+   * *Fix*: Automatic first-boot execution sets `angle_gl_driver_selection_values=native` for `com.android.camera`.
+3. **MIVI Parallel Processing & Signature Validation**:
+   * Integrated Sevtinge v1.1.1 universal AOSP port APK (7 DEX layers) with 12 MP (Pixel Binning) and 108 MP (Remosaic) modes fully functional.
+   * Cleared `.idsig` files so PackageManager registers the launcher icon automatically.
 
-### Next Steps for the AI
-1. Read `CHECKPOINT_6.md` and use the patched APK layout.
-2. If further crashes occur, run `adb shell logcat -b crash -d` (device must be connected) to trace new stack traces.
-3. Keep the APK path as `/system/priv-app/MiuiCamera/MiuiCamera.apk` with standard 644 permissions.
+### Official Reference & Future Maintenance
+* Official AOSP device tree reference for Xiaomi 12T (`plato`): `https://github.com/mt6895-plato/android_device_xiaomi_plato-miuicamera`
 ```
