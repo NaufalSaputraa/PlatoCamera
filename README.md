@@ -6,9 +6,9 @@
 
 ## 📱 Preview & Screenshots
 
-| Photo Mode Options | Video Mode (60 FPS) | Pro Mode | Pro Mode (108MP Toggle) | More Modes Grid |
-|:---:|:---:|:---:|:---:|:---:|
-| <img src="docs/images/photo_mode.png" width="180"/> | <img src="docs/images/video_mode.png" width="180"/> | <img src="docs/images/pro_mode.png" width="180"/> | <img src="docs/images/pro_108mp_mode.png" width="180"/> | <img src="docs/images/more_modes.png" width="180"/> |
+| Photo Mode | Video Mode (60 FPS) | Pro Mode | 108MP Pro Toggle | More Modes Grid | Camera Settings | Modification Info |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="docs/images/photo_mode.png" width="160"/> | <img src="docs/images/video_mode.png" width="160"/> | <img src="docs/images/pro_mode.png" width="160"/> | <img src="docs/images/pro_108mp_mode.png" width="160"/> | <img src="docs/images/more_modes.png" width="160"/> | <img src="docs/images/settings_1.png" width="160"/> | <img src="docs/images/settings_credits.png" width="160"/> |
 
 ---
 
@@ -54,9 +54,18 @@
 
 ---
 
-### 🔒 Verifikasi Keamanan (SHA256 Checksums)
+## 📜 Credits & Acknowledgements / Penghargaan
 
-Kamu bisa memverifikasi keaslian file yang diunduh menggunakan hash SHA-256 berikut:
+Project porting ini dibangun di atas karya luar biasa dari para modder dan pengembang komunitas Android:
+
+- **Original Base App**: Xiaomi Technology Co., Ltd. (Original MIUI / HyperOS Camera).
+- **Original Mod Author**: **[@HolyBearHome](https://github.com/a406010503)** (聖小熊) - Original Universal Leica Camera Mod.
+- **Universal Port & Modder**: **[@itzdfplayer](https://t.me/itzdfplayer_stash)** & **绀漓丨Sevtinge** ([@Sevtinge](https://github.com/Sevtinge)) - Universal Leica Camera 5.0 AOSP Port.
+- **PlatoCamera Port & AOSP 15/16 Fixes**: **[@NaufalSaputraa](https://github.com/NaufalSaputraa)** - Packaging, ANGLE crash fixes, MediaTek libraries integration, and Android 15/16 AOSP compatibility for Xiaomi 12T (`plato`).
+
+---
+
+### 🔒 Verifikasi Keamanan (SHA256 Checksums)
 
 | Nama File | SHA-256 Checksum |
 |---|---|
@@ -75,7 +84,6 @@ Kamu bisa memverifikasi keaslian file yang diunduh menggunakan hash SHA-256 beri
      ```toml
      disable_umount = true
      ```
-   - *Why?* By default, `hybrid_mount` unmounts overlays for non-root apps. If `disable_umount = false`, OverlayFS hides `MiuiCamera.apk`, causing startup crashes.
 
 2. **Flash Module**:
    - Download `PlatoCamera-v1.4.7-Stable.zip` from Releases.
@@ -90,7 +98,3 @@ Kamu bisa memverifikasi keaslian file yang diunduh menggunakan hash SHA-256 beri
 
 5. **Clear App Data**:
    - Go to **Settings -> Apps -> Camera -> Storage -> Clear Data**.
-   - Open the app, grant permissions, and enjoy!
-
-> 💡 **Note on standalone `PlatoCamera.apk` in Releases**:
-> Launcher icons now **automatically appear** upon flashing the ZIP. The standalone `PlatoCamera.apk` in the Releases section is purely **optional (backup)** for custom launchers that fail to index system apps.
